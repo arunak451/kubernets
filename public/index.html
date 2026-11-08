@@ -31,6 +31,7 @@ header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-be
 h1{font:800 clamp(1.6rem,4vw,2.3rem)/1.1 var(--display);margin:0;text-wrap:balance}
 h1 span{color:var(--rose)}
 .tag{color:var(--muted);margin:0;font-size:.95rem}
+.tag a{color:var(--rose);font-weight:700;text-decoration:none}.tag a:hover{text-decoration:underline}
 .main{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start}
 @media (max-width:900px){.main{grid-template-columns:minmax(0,1fr)}}
 
@@ -145,7 +146,7 @@ aside h2 small{font:600 .8rem var(--body);color:var(--muted)}
 
 .yaml .ybody{padding:10px 14px;display:grid;gap:3px;font:clamp(.66rem,1.55vw,.9rem)/1.45 var(--mono);overflow-x:auto}
 .yl{display:grid;grid-template-columns:minmax(0,max-content) auto;gap:4px 14px;align-items:baseline;animation:pop .35s ease both}
-.yl code{white-space:pre;font:inherit;color:#FFFFFF}
+.yl code{white-space:pre-wrap;overflow-wrap:anywhere;min-width:0;font:inherit;color:#FFFFFF}
 .yl span{font:600 clamp(.66rem,1.45vw,.84rem)/1.3 var(--body);color:#FFE3B0;white-space:nowrap}
 .yl span::before{content:"← ";color:var(--accent)}
 .yk{color:#9FD9C4;font-weight:600}.yv{color:#FFFFFF;font-weight:400}.yd{color:var(--accent)}
@@ -199,7 +200,7 @@ aside h2 small{font:600 .8rem var(--body);color:var(--muted)}
 <div class="wrap">
   <header>
     <h1>Malli Akka <span>Kubernetes Class</span></h1>
-    <p class="tag">DevOps ku thevaiyaana Kubernetes · 26 lessons + 7 advanced + 2 project + 8 interview prep + 8 level up · ovvonnum ~2 nimisham</p>
+    <p class="tag">DevOps ku thevaiyaana Kubernetes · 26 lessons + 7 advanced + 2 project + 8 interview prep + 8 level up · ovvonnum ~2 nimisham · <a href="aibot/">🤖 AI Interview Bot course</a></p>
     <nav class="nav" aria-label="Views">
       <button class="btn tab on" id="navClass" type="button">📺 Class</button>
       <button class="btn tab" id="navCheat" type="button">📄 Cheat sheet</button>

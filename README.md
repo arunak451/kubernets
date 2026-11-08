@@ -14,6 +14,8 @@ Live: https://kubernets.vercel.app
 - Practice terminal (4 simulated `kubectl`/`helm` tasks per lesson, hint/skip/restart, praise audio), a 5-question shuffled quiz, and a searchable cheat sheet
 - Progress is saved in localStorage, and the layout works on mobile
 
+**Bonus course: [/aibot/](https://kubernets.vercel.app/aibot/)**: Malli Akka explains [ai-interview-prep-bot](https://github.com/arunak451/ai-interview-prep-bot) line by line in 15 lessons (architecture, prompt engineering, JSON-schema structured outputs, Groq retries, history.json, Telegram limits, two-phase generate/send, GitHub Actions cron & idempotency, interview pitch), with practice, quizzes and a 13-step build guide.
+
 ## Layout
 
 ```
@@ -27,6 +29,7 @@ public/            ← the only folder Vercel serves (vercel.json → outputDire
   extras.js        interview lessons, practice tasks, quizzes
   durations.js     lesson lengths (generated)
   audio/           {lesson}-{scene}.mp3 + fx-*.mp3 (generated)
+  aibot/           AI Interview Bot course (same player; course.js, extras.js, project.js, audio/)
 tools/             NOT deployed
   ta.mjs           Tanglish subtitle ➜ Tamil-script narration (tech words stay English, K 8 S, kube control, Y A M L …)
   gen-audio.mjs    Sarvam AI TTS (bulbul:v3, kavitha, ta-IN, mp3)
@@ -45,6 +48,7 @@ node tools/gen-audio.mjs --mock             # mock interview questions
 node tools/gen-audio.mjs --all              # everything missing
 node tools/durations.mjs
 node tools/check.mjs
+# AI Interview Bot course: prefix any of these with COURSE=aibot
 ```
 
 ## Deploy
