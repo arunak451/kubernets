@@ -2,7 +2,7 @@
 <html lang="ta">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Malli Akka AI Bot Class</title>
+<title>Malli Akka AI Interview Q&amp;A</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Thambi+2:wght@500;700;800&family=Nunito:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -171,6 +171,11 @@ aside h2 small{font:600 .8rem var(--body);color:var(--muted)}
 .mk-timer{font:700 1.1rem var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}.mk-timer.over{color:var(--rose)}
 .mk-ans{margin:10px 0;padding-left:20px;display:grid;gap:6px}.mk-ans li::marker{color:var(--done)}
 .mk-ok{border-color:var(--done)}
+.qcard .qd,.qacard .qd{font:600 .78rem/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--stage-soft);margin-bottom:10px}
+.qcard .qt{font:800 clamp(1.15rem,3vw,2rem)/1.2 var(--display);color:var(--accent);text-wrap:balance}
+.qacard .qa-a{font:600 clamp(.85rem,1.9vw,1.12rem)/1.45 var(--body);color:var(--stage-ink);background:rgba(0,0,0,.22);border-left:4px solid var(--accent);padding:10px 14px;border-radius:8px}
+.kw{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.kw span{font:600 .78rem var(--mono);color:#FFE3B0;background:rgba(0,0,0,.3);border:1px solid rgba(255,227,176,.35);padding:3px 9px;border-radius:999px;animation:pop .4s ease both}
+.ccard td:first-child{font-size:.86rem}
 /* Avatar animation */
 .lid{transform:scaleY(0);transform-box:fill-box;transform-origin:center top;animation:wink 4.5s infinite}
 .m-open{display:none}
@@ -199,13 +204,13 @@ aside h2 small{font:600 .8rem var(--body);color:var(--muted)}
 
 <div class="wrap">
   <header>
-    <h1>Malli Akka <span>AI Interview Bot Class</span></h1>
-    <p class="tag">Un <a href="https://github.com/arunak451/ai-interview-prep-bot">ai-interview-prep-bot</a> project, line by line · 15 lessons · ovvonnum ~1.5 nimisham · <a href="../">☸ Kubernetes course</a></p>
+    <h1>Malli Akka <span>AI Interview Q&amp;A</span></h1>
+    <p class="tag">Un <a href="https://github.com/arunak451/ai-interview-prep-bot">ai-interview-prep-bot</a> la irukkura most-asked interview kelvigal, Malli Akka teach panraanga · <span id="qcount"></span> · <a href="../">☸ Kubernetes course</a> · <a href="../aibot-code/">🧑‍💻 Bot code walkthrough</a></p>
     <nav class="nav" aria-label="Views">
       <button class="btn tab on" id="navClass" type="button">📺 Class</button>
-      <button class="btn tab" id="navCheat" type="button">📄 Cheat sheet</button>
-      <button class="btn tab" id="navProj" type="button">🛠 Build guide</button>
-      <button class="btn tab" id="navMock" type="button" hidden>🎤 Mock interview</button>
+      <button class="btn tab" id="navCheat" type="button">📄 Quick revision</button>
+      <button class="btn tab" id="navProj" type="button" hidden>🛠 Build guide</button>
+      <button class="btn tab" id="navMock" type="button">🎤 Mock interview</button>
     </nav>
   </header>
 
@@ -218,7 +223,7 @@ aside h2 small{font:600 .8rem var(--body);color:var(--muted)}
 
   <section id="mock" hidden>
     <div class="cheat-head"><h2>Mock interview</h2>
-      <label class="note" for="mkLvl">Level <select id="mkLvl"><option value="">Ellaam</option><option>Junior</option><option>Mid</option><option>Senior</option></select></label></div>
+      <label class="note" for="mkLvl">Domain <select id="mkLvl"><option value="">Ellaa domains</option><option value="genai">🤖 Generative AI</option><option value="agentic_ai">🧠 Agentic AI</option><option value="ai_agents">🛠️ AI Agents</option><option value="aws">☁️ AWS</option><option value="devops">⚙️ DevOps</option></select></label></div>
     <p class="pj-intro">Malli Akka kelvi kekkum. Sathama, interview la pesura maathiri answer sollu (60 sec). Apram model answer paathu, neeye honest ah mark podu.</p>
     <div class="pj-bar"><i id="mkBar"></i></div>
     <div class="mk-card" id="mkCard"></div>
@@ -226,8 +231,8 @@ aside h2 small{font:600 .8rem var(--body);color:var(--muted)}
 
   <section id="cheat" hidden>
     <div class="cheat-head">
-      <h2>Cheat sheet</h2>
-      <input id="cq" type="search" placeholder="Command thedu... (eg: grep, jq, gh, curl)" aria-label="Search commands">
+      <h2>Quick revision</h2>
+      <input id="cq" type="search" placeholder="Kelvi thedu... (eg: RAG, IAM, Docker)" aria-label="Search commands">
     </div>
     <div id="cheatBody" class="cheat-grid"></div>
   </section>
@@ -344,11 +349,11 @@ aside h2 small{font:600 .8rem var(--body);color:var(--muted)}
         <div id="paneP" role="tabpanel">
           <div class="task" id="task"></div>
           <div class="term pterm">
-            <div class="term-bar"><i></i><i></i><i></i><span>practice terminal</span></div>
+            <div class="term-bar"><i></i><i></i><i></i><span>keyword practice</span></div>
             <div class="term-body pout" id="pout" aria-live="polite"></div>
             <form class="pform" id="pform">
-              <label for="pin" class="p">kutty@bot:~$</label>
-              <input id="pin" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="command type panni Enter amukku">
+              <label for="pin" class="p">kutty@interview:~$</label>
+              <input id="pin" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="keyword type panni Enter amukku">
             </form>
           </div>
           <div class="controls">
@@ -375,10 +380,13 @@ aside h2 small{font:600 .8rem var(--body);color:var(--muted)}
 </div>
 
 <script src="durations.js"></script>
-<script src="course.js"></script>
-<script src="project.js"></script>
-<script>window.MOCK=[];</script>
-<script src="extras.js"></script>
+<script src="questions.js"></script>
+<script src="qa-genai.js"></script>
+<script src="qa-agentic_ai.js"></script>
+<script src="qa-ai_agents.js"></script>
+<script src="qa-aws.js"></script>
+<script src="qa-devops.js"></script>
+<script src="qa-course.js"></script>
 <script>
 const B=(a,b)=>({k:"big",a,b}), T=(...l)=>({k:"term",l}), Li=(a,...r)=>({k:"list",a,r}), Y=(f,...r)=>({k:"yaml",f,r});
 const A={lessons:[],practice:[],quiz:[]};
@@ -396,11 +404,11 @@ let L=0,S=0,playing=false,token=0,soundOn=true,natural=true,voice=null,voices=[]
 const audio=new Audio(); audio.preload="auto";
 let actx=null,analyser=null,abuf=null,raf=0;
 const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
-if(store.get("aibot-v",1)<2){const sh=i=>+i>=NCORE?+i+A.lessons.length:+i, shk=o=>Object.fromEntries(Object.entries(o).map(([k,v])=>[sh(k),v]));
-  store.set("aibot-done",store.get("aibot-done",[]).map(sh)); store.set("aibot-prac",shk(store.get("aibot-prac",{}))); store.set("aibot-quiz",shk(store.get("aibot-quiz",{})));
-  const p=store.get("aibot-pos",[0,0]); store.set("aibot-pos",[sh(p[0]),p[1]]); store.set("aibot-v",2)}
-let done=store.get("aibot-done",[]);
-let pracDone=store.get("aibot-prac",{}), quizBest=store.get("aibot-quiz",{});
+if(store.get("aiqa-v",1)<2){const sh=i=>+i>=NCORE?+i+A.lessons.length:+i, shk=o=>Object.fromEntries(Object.entries(o).map(([k,v])=>[sh(k),v]));
+  store.set("aiqa-done",store.get("aiqa-done",[]).map(sh)); store.set("aiqa-prac",shk(store.get("aiqa-prac",{}))); store.set("aiqa-quiz",shk(store.get("aiqa-quiz",{})));
+  const p=store.get("aiqa-pos",[0,0]); store.set("aiqa-pos",[sh(p[0]),p[1]]); store.set("aiqa-v",2)}
+let done=store.get("aiqa-done",[]);
+let pracDone=store.get("aiqa-prac",{}), quizBest=store.get("aiqa-quiz",{});
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const mins=l=>{const d=(window.DUR||[])[LESSONS.indexOf(l)]; if(d) return `${Math.floor(d/60)}:${String(d%60).padStart(2,"0")}`; return "~"+Math.max(1,Math.round(l.s.reduce((n,x)=>n+x[0].split(/\s+/).length,0)/70))+"m"};
 
@@ -413,15 +421,17 @@ function renderList(){
 const yhl=s=>{const m=s.match(/^(\s*)(- )?([\w.\/-]+:)?(.*)$/);if(!m)return esc(s);
   return esc(m[1])+(m[2]?`<b class="yd">- </b>`:"")+(m[3]?`<b class="yk">${esc(m[3])}</b>`:"")+`<b class="yv">${esc(m[4])}</b>`};
 function renderBoard(v){
+  if(v.k==="q") return `<div class="bview qcard"><div class="qd">${esc(v.d)} · ${esc(v.no)}</div><div class="qt">❓ ${esc(v.q)}</div></div>`;
+  if(v.k==="qa") return `<div class="bview qacard"><div class="qd">🎯 Interview la ipdi sollu</div><div class="qa-a">${esc(v.a)}</div><div class="kw">${v.kw.map((k,i)=>`<span style="animation-delay:${.4+i*.2}s">${esc(k)}</span>`).join("")}</div></div>`;
   if(v.k==="big") return `<div class="bview"><div class="b-a">${esc(v.a)}</div><div class="b-b">${esc(v.b)}</div></div>`;
   if(v.k==="list") return `<div class="bview b-list"><h3>${esc(v.a)}</h3><ul>${v.r.map((r,i)=>`<li style="animation-delay:${i*.25}s"><code>${esc(r[0])}</code><span>${esc(r[1])}</span></li>`).join("")}</ul></div>`;
   if(v.k==="yaml") return `<div class="bview term yaml"><div class="term-bar"><i></i><i></i><i></i><span>${esc(v.f)}</span></div><div class="ybody">${v.r.map((r,i)=>`<div class="yl" style="animation-delay:${i*.35}s"><code>${yhl(r[0])}</code>${r[1]?`<span>${esc(r[1])}</span>`:""}</div>`).join("")}</div></div>`;
   let d=0,h="";
   v.l.forEach(([c,o])=>{
-    h+=`<div style="animation-delay:${d}s"><span class="p">kutty@bot:~$ </span><span class="c">${esc(c)}</span>${c?"":'<span class="cursor"></span>'}</div>`;d+=.5;
+    h+=`<div style="animation-delay:${d}s"><span class="p">kutty@interview:~$ </span><span class="c">${esc(c)}</span>${c?"":'<span class="cursor"></span>'}</div>`;d+=.5;
     if(o) o.split("\n").forEach(line=>{h+=`<div class="o" style="animation-delay:${d}s">${esc(line)}</div>`;d+=.2});
   });
-  return `<div class="bview term"><div class="term-bar"><i></i><i></i><i></i><span>kutty@bot — terminal</span></div><div class="term-body">${h}</div></div>`;
+  return `<div class="bview term"><div class="term-bar"><i></i><i></i><i></i><span>interview — answer</span></div><div class="term-body">${h}</div></div>`;
 }
 function renderScene(){
   const l=LESSONS[L],sc=l.s[S];
@@ -494,21 +504,21 @@ function playAudio(my,parts){
 async function run(){
   const my=++token;
   renderScene();
-  const parts=LESSONS[L].s[S][0].match(/[^.!?]+[.!?]*/g).map(s=>s.trim()).filter(Boolean);
+  const parts=LESSONS[L].s[S][0].split(/(?<=[.!?])\s+/).map(s=>s.trim()).filter(Boolean);
   let spoken=false;
   if(natural&&soundOn) spoken=await playAudio(my,parts);
   if(my!==token) return;
   if(!spoken) for(const p of parts){ if(my!==token) return; $("cap").textContent=p; await speak(p); }
   if(my!==token) return; await wait(700); if(my!==token) return;
   if(S<LESSONS[L].s.length-1){S++;run()}
-  else{ if(!done.includes(L)){done.push(L);store.set("aibot-done",done)} renderList();
+  else{ if(!done.includes(L)){done.push(L);store.set("aiqa-done",done)} renderList();
     if(L<LESSONS.length-1){$("cap").textContent="Lesson mudinjuthu! Ippo keela Practice & Quiz try pannu kutty 👇";} setPlaying(false); }
 }
 function stop(){token++; if(synth) synth.cancel();
   audio.onended=audio.onerror=audio.ontimeupdate=null; audio.pause(); lipStop()}
 function setPlaying(p){playing=p;$("play").textContent=p?"⏸ Pause":"▶ Play"}
 function go(l,s,autoplay){stop();const changed=l!==L;L=l;S=s;renderList();renderScene();if(changed)renderLab();$("cap").textContent=LESSONS[L].s[S][0];
-  store.set("aibot-pos",[L,S]); if(autoplay){setPlaying(true);run()} else setPlaying(false)}
+  store.set("aiqa-pos",[L,S]); if(autoplay){setPlaying(true);run()} else setPlaying(false)}
 
 $("play").onclick=()=>{ setupLip(); if(playing){stop();setPlaying(false)} else { if(S===LESSONS[L].s.length-1 && done.includes(L) && $("cap").textContent.startsWith("Lesson mudinjuthu")) S=0; setPlaying(true); run(); } };
 $("next").onclick=()=>{const n=LESSONS[L].s.length; if(S<n-1) go(L,S+1,playing); else if(L<LESSONS.length-1) go(L+1,0,playing)};
@@ -518,7 +528,7 @@ $("list").onclick=e=>{const b=e.target.closest(".lesson"); if(b){setupLip();go(+
 $("mute").onclick=()=>{ soundOn=!soundOn; $("mute").textContent=soundOn?"🔊 Sound on":"🔇 Sound off"; if(playing){stop();setPlaying(true);run()} };
 $("rate").onchange=()=>{ if(playing){stop();setPlaying(true);run()} };
 $("voice").onchange=()=>{const v=$("voice").value; natural=v==="kavitha"; voice=natural?null:voices[+v]||null;
-  store.set("aibot-voice",natural?"kavitha":voice&&voice.name); if(playing){stop();setPlaying(true);run()}};
+  store.set("aiqa-voice",natural?"kavitha":voice&&voice.name); if(playing){stop();setPlaying(true);run()}};
 $("copy").onclick=()=>{const t=$("script").textContent;
   const ok=()=>$("copied").textContent="Copied!";
   const fallback=()=>{const r=document.createRange();r.selectNodeContents($("script"));const s=getSelection();s.removeAllRanges();s.addRange(r);$("copied").textContent="Select aagiduchu, Ctrl+C pannu"};
@@ -528,7 +538,7 @@ function loadVoices(){
   const all=synth?synth.getVoices():[];
   const score=v=>(/en-IN/i.test(v.lang)?20:0)+(/^en/i.test(v.lang)?5:0)+(/neerja|heera|swara|veena|female|zira|samantha|aria|jenny/i.test(v.name)?8:0)+(/natural|online/i.test(v.name)?4:0);
   voices=all.filter(v=>/^(en|ta)/i.test(v.lang)).sort((a,b)=>score(b)-score(a));
-  const saved=store.get("aibot-voice","kavitha");
+  const saved=store.get("aiqa-voice","kavitha");
   const idx=voices.findIndex(v=>v.name===saved);
   $("voice").innerHTML=`<option value="kavitha">Kavitha (natural Tamil)</option>`+
     voices.map((v,i)=>`<option value="${i}">Browser: ${esc(v.name.replace(/^Microsoft |Online \(Natural\) - /g,""))} (${v.lang})</option>`).join("");
@@ -538,7 +548,7 @@ function loadVoices(){
 loadVoices();
 if(synth) synth.onvoiceschanged=loadVoices;
 
-const pos=store.get("aibot-pos",[0,0]);
+const pos=store.get("aiqa-pos",[0,0]);
 L=Math.min(pos[0]||0,LESSONS.length-1); S=Math.min(pos[1]||0,LESSONS[L].s.length-1);
 // ---------- Practice terminal ----------
 const GOOD=["Super kutty! Correct ah type panna!","Vaav! Nee oru AI engineer star!","Arumai kutty! Adutha task pannalaam.","Perfect! Naan romba proud kutty!"];
@@ -555,7 +565,7 @@ function labInfo(){
 function renderTask(){
   const ts=PR();
   if(pi>=ts.length){$("task").innerHTML=`🎉 Practice mudinjuthu! <small>Ippo 📝 Quiz tab try pannu, illa ↺ Restart amukki thirumba pannu.</small>`;return}
-  $("task").innerHTML=`Task ${pi+1} / ${ts.length}: ${esc(ts[pi][0])}<small>Command type panni Enter amukku. Theriyala na 💡 Hint.</small>`;
+  $("task").innerHTML=`Task ${pi+1} / ${ts.length}: ${esc(ts[pi][0])}<small>Keyword type panni Enter amukku. Theriyala na 💡 Hint.</small>`;
 }
 function renderLab(){
   pi=Math.min(pracDone[L]||0,PR().length);
@@ -576,7 +586,7 @@ $("pform").onsubmit=e=>{
   if(t[2].test(v)){
     const out=t[3]==="$echo"?v.replace(/^echo /,"").replace(/^["']|["']$/g,""):t[3];
     if(out) out.split("\n").forEach(x=>pline("o",x));
-    pi++; pracDone[L]=Math.max(pracDone[L]||0,pi); store.set("aibot-prac",pracDone);
+    pi++; pracDone[L]=Math.max(pracDone[L]||0,pi); store.set("aiqa-prac",pracDone);
     if(pi>=PR().length){pline("ok","🎉 Super kutty! Intha lesson practice mudichitta! Ippo Quiz try pannu.");fx("prac-done")}
     else{const k=rnd(4);pline("ok","✔ "+GOOD[k-1]);fx("good-"+k)}
     renderTask(); labInfo();
@@ -611,7 +621,7 @@ $("paneQ").onclick=e=>{
   if(e.target.id==="qretry"){renderQuiz(true);return}
   if(e.target.id==="qnext"){
     qi++;
-    if(qi>=Q.length){quizBest[L]=Math.max(quizBest[L]??0,qscore);store.set("aibot-quiz",quizBest);fx(qscore>=4?"quiz-great":"quiz-ok");renderList();labInfo()}
+    if(qi>=Q.length){quizBest[L]=Math.max(quizBest[L]??0,qscore);store.set("aiqa-quiz",quizBest);fx(qscore>=4?"quiz-great":"quiz-ok");renderList();labInfo()}
     renderQuiz(false);return;
   }
   const b=e.target.closest(".qopt"); if(!b||qanswered) return;
@@ -632,18 +642,16 @@ $("tabQ").onclick=()=>showTab(true);
 const SHORT=[["python bot.py generate","night: questions ➜ pending.json"],["python bot.py send","7 AM: pending ➜ Telegram"],["FORCE_SEND=1 python bot.py send","re-send today"],["GROQ_API_KEY","secret (Groq)"],["TELEGRAM_BOT_TOKEN","secret (BotFather)"],["TELEGRAM_CHAT_ID","secret (getUpdates)"],["GROQ_MODEL","repo variable (optional)"],["30 15 * * *","9:00 PM IST ➜ generate"],["15 1 * * *","6:45 AM IST ➜ send (backup)"],["IST","UTC + 5:30"],["history.json","asked questions (memory)"],["pending.json","tomorrow's questions"],["gh workflow run send.yml","manual trigger"]];
 function renderCheat(){
   const q=$("cq").value.trim().toLowerCase();
-  const html=LESSONS.map((l,i)=>{
-    const rows=(X.practice[i]||[]).filter(t=>!q||`${t[1]} ${t[4]} ${l.t}`.toLowerCase().includes(q));
+  const html=window.QCHUNKS.map((c,i)=>{
+    const rows=c.filter(x=>!q||`${x.q} ${x.s} ${x.k.join(" ")}`.toLowerCase().includes(q));
     if(!rows.length) return "";
-    return `<div class="ccard"><h3><span>${i+1}</span>${esc(l.t)}</h3><table>${rows.map(t=>`<tr><td><code>${esc(t[1])}</code></td><td>${esc(t[4])}</td></tr>`).join("")}</table></div>`;
+    return `<div class="ccard"><h3><span>${i+1}</span>${esc(LESSONS[i].t)}</h3><table>${rows.map(x=>`<tr><td>${esc(x.q)}</td><td><code>${esc(x.s)}</code></td></tr>`).join("")}</table></div>`;
   }).join("");
-  const sf=SHORT.filter(t=>!q||`${t[0]} ${t[1]}`.toLowerCase().includes(q));
-  const top=sf.length?`<div class="ccard short"><h3><span>★</span>Bot quick reference</h3><table>${sf.map(t=>`<tr><td><code>${esc(t[0])}</code></td><td>${esc(t[1])}</td></tr>`).join("")}</table></div>`:"";
-  $("cheatBody").innerHTML=(top+html)||`<p class="note">"${esc(q)}" ku edhuvum kidaikkala kutty.</p>`;
+  $("cheatBody").innerHTML=html||`<p class="note">"${esc(q)}" ku edhuvum kidaikkala kutty.</p>`;
 }
 $("cq").oninput=renderCheat;
 // ---------- Project guide ----------
-let pjDone=store.get("aibot-proj",[]);
+let pjDone=store.get("aiqa-proj",[]);
 function renderProj(){
   const P=window.PROJECT; if(!P) return;
   $("pjTitle").textContent=P.title; $("pjIntro").textContent=P.intro;
@@ -653,13 +661,13 @@ function renderProj(){
 }
 function pjCount(){const n=window.PROJECT.steps.length;$("pjCount").textContent=`${pjDone.length} / ${n} steps mudinjuthu`;$("pjBar").style.width=(pjDone.length/n*100)+"%"}
 $("pjSteps").onchange=e=>{const i=+e.target.dataset.i; pjDone=e.target.checked?[...new Set([...pjDone,i])]:pjDone.filter(x=>x!==i);
-  store.set("aibot-proj",pjDone); e.target.closest("li").classList.toggle("done",e.target.checked); pjCount()};
+  store.set("aiqa-proj",pjDone); e.target.closest("li").classList.toggle("done",e.target.checked); pjCount()};
 $("pjSteps").onclick=e=>{const b=e.target.closest(".pj-copy"); if(!b) return; const t=window.PROJECT.steps[+b.dataset.i].c;
   const ok=()=>{b.textContent="Copied!";setTimeout(()=>b.textContent="Copy",1500)};
   try{navigator.clipboard.writeText(t).then(ok,()=>{b.textContent="Select panni copy pannu"})}catch(e){b.textContent="Select panni copy pannu"}};
 
 // ---------- Mock interview ----------
-let mkRes=store.get("aibot-mock",{}), mkOrder=[], mkI=0, mkTimer=0, mkLeft=0;
+let mkRes=store.get("aiqa-mock",{}), mkOrder=[], mkI=0, mkTimer=0, mkLeft=0;
 const mkAudio=new Audio();
 const mkList=()=>window.MOCK.map((m,i)=>i).filter(i=>!$("mkLvl").value||window.MOCK[i].l===$("mkLvl").value||window.MOCK[i].l==="All");
 function mkStart(){mkOrder=shuffle(mkList());mkI=0;mkRender()}
@@ -690,7 +698,7 @@ function mkHear(i){mkAudio.pause();if(synth)synth.cancel();const fb=()=>{girl().
 $("mkCard").onclick=e=>{const id=e.target.id, i=mkOrder[mkI];
   if(id==="mkHear") mkHear(i);
   else if(id==="mkShow"){clearInterval(mkTimer);$("mkAns").hidden=false;e.target.hidden=true}
-  else if(id==="mkOk"||id==="mkNo"){mkRes[i]=id==="mkOk"?1:0;store.set("aibot-mock",mkRes);fx(id==="mkOk"?"good-"+rnd(4):"retry-1");mkI++;mkRender()}
+  else if(id==="mkOk"||id==="mkNo"){mkRes[i]=id==="mkOk"?1:0;store.set("aiqa-mock",mkRes);fx(id==="mkOk"?"good-"+rnd(4):"retry-1");mkI++;mkRender()}
   else if(id==="mkAgain") mkStart();
   else if(id==="mkRev"){mkOrder=shuffle(mkOrder.filter(i=>mkRes[i]!==1));mkI=0;mkRender()}};
 $("mkLvl").onchange=mkStart;
@@ -709,6 +717,7 @@ $("navProj").onclick=()=>{location.hash="project";showView("proj")};
 $("navMock").onclick=()=>{location.hash="mock";showView("mock")};
 window.addEventListener("hashchange",()=>showView(viewFromHash()));
 
+$("qcount").textContent=`${window.MOCK.length} kelvigal · ${LESSONS.length} lessons`;
 renderList(); renderScene(); renderLab(); renderCheat(); renderProj();
 showView(viewFromHash());
 </script>

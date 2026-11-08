@@ -16,7 +16,7 @@ try { for (const l of fs.readFileSync(path.join(root, ".env"), "utf8").split("\n
 const KEY = process.env.SARVAM_API_KEY;
 
 const FX = {
-  "good-1": "சூப்பர் குட்டி! Correct ஆ type பண்ண!", "good-2": COURSE === "aibot" ? "வாவ்! நீ ஒரு AI engineer star!" : "வாவ்! நீ ஒரு Kubernetes star!",
+  "good-1": "சூப்பர் குட்டி! Correct ஆ type பண்ண!", "good-2": COURSE.startsWith("aibot") ? "வாவ்! நீ ஒரு AI engineer star!" : "வாவ்! நீ ஒரு Kubernetes star!",
   "good-3": "அருமை குட்டி! அடுத்த task பண்ணலாம்.", "good-4": "Perfect! நான் ரொம்ப proud குட்டி!",
   "retry-1": "பரவால்ல குட்டி, இன்னொரு தடவ try பண்ணு.", "retry-2": "கொஞ்சம் miss ஆயிடுச்சு. Hint பாத்து try பண்ணு குட்டி.",
   "prac-done": "சூப்பர் குட்டி! இந்த lesson practice முடிச்சிட்ட! இப்போ quiz try பண்ணு.",
@@ -34,7 +34,7 @@ if (has("--print")) {
 
 let jobs = [];
 const scene = (L, S) => ({ name: `${L}-${S}`, text: ta(lessons[L - 1].s[S - 1][0]) });
-if (has("--sample")) jobs = (COURSE === "aibot" ? ["1-1", "6-2", "10-5"] : ["1-1", "2-3", "4-6", "10-4", "18-1"]).map(x => scene(...x.split("-").map(Number)));
+if (has("--sample")) jobs = (COURSE === "aibot" ? ["1-1", "1-2", "3-4"] : COURSE === "aibotcode" ? ["1-1", "6-2", "10-5"] : ["1-1", "2-3", "4-6", "10-4", "18-1"]).map(x => scene(...x.split("-").map(Number)));
 else if (has("--only")) jobs = val("--only").split(",").map(x => scene(...x.split("-").map(Number)));
 else if (has("--lessons")) jobs = range(val("--lessons")).flatMap(L => lessons[L - 1].s.map((_, j) => scene(L, j + 1)));
 else if (has("--all")) jobs = lessons.flatMap((l, i) => l.s.map((_, j) => scene(i + 1, j + 1)));
