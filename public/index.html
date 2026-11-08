@@ -165,6 +165,11 @@ aside h2 small{font:600 .8rem var(--body);color:var(--muted)}
 .pj-code pre{margin:0;padding:12px 14px;overflow-x:auto;font:.82rem/1.5 var(--mono);color:#E6F4EF}
 .pj-copy{position:absolute;top:6px;right:6px;padding:4px 10px;font-size:.78rem}
 @media (max-width:620px){.pj p{margin-left:0}}
+#mock{display:grid;gap:14px}
+.mk-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;gap:4px}
+.mk-timer{font:700 1.1rem var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}.mk-timer.over{color:var(--rose)}
+.mk-ans{margin:10px 0;padding-left:20px;display:grid;gap:6px}.mk-ans li::marker{color:var(--done)}
+.mk-ok{border-color:var(--done)}
 /* Avatar animation */
 .lid{transform:scaleY(0);transform-box:fill-box;transform-origin:center top;animation:wink 4.5s infinite}
 .m-open{display:none}
@@ -194,11 +199,12 @@ aside h2 small{font:600 .8rem var(--body);color:var(--muted)}
 <div class="wrap">
   <header>
     <h1>Malli Akka <span>Kubernetes Class</span></h1>
-    <p class="tag">DevOps ku thevaiyaana Kubernetes · 26 lessons + 7 advanced + 2 project + 8 interview prep · ovvonnum ~2 nimisham</p>
+    <p class="tag">DevOps ku thevaiyaana Kubernetes · 26 lessons + 7 advanced + 2 project + 8 interview prep + 8 level up · ovvonnum ~2 nimisham</p>
     <nav class="nav" aria-label="Views">
       <button class="btn tab on" id="navClass" type="button">📺 Class</button>
       <button class="btn tab" id="navCheat" type="button">📄 Cheat sheet</button>
       <button class="btn tab" id="navProj" type="button">🛠 Project guide</button>
+      <button class="btn tab" id="navMock" type="button">🎤 Mock interview</button>
     </nav>
   </header>
 
@@ -207,6 +213,14 @@ aside h2 small{font:600 .8rem var(--body);color:var(--muted)}
     <p class="pj-intro" id="pjIntro"></p>
     <div class="pj-bar"><i id="pjBar"></i></div>
     <ol id="pjSteps" class="pj-steps"></ol>
+  </section>
+
+  <section id="mock" hidden>
+    <div class="cheat-head"><h2>Mock interview</h2>
+      <label class="note" for="mkLvl">Level <select id="mkLvl"><option value="">Ellaam</option><option>Junior</option><option>Mid</option><option>Senior</option></select></label></div>
+    <p class="pj-intro">Malli Akka kelvi kekkum. Sathama, interview la pesura maathiri answer sollu (60 sec). Apram model answer paathu, neeye honest ah mark podu.</p>
+    <div class="pj-bar"><i id="mkBar"></i></div>
+    <div class="mk-card" id="mkCard"></div>
   </section>
 
   <section id="cheat" hidden>
@@ -363,6 +377,8 @@ aside h2 small{font:600 .8rem var(--body);color:var(--muted)}
 <script src="lessons.js"></script>
 <script src="advanced.js"></script>
 <script src="project.js"></script>
+<script src="levelup.js"></script>
+<script src="mock.js"></script>
 <script src="extras.js"></script>
 <script>
 const B=(a,b)=>({k:"big",a,b}), T=(...l)=>({k:"term",l}), Li=(a,...r)=>({k:"list",a,r}), Y=(f,...r)=>({k:"yaml",f,r});
@@ -373,6 +389,7 @@ const NCORE=LESSONS.length-A.lessons.length;
 const X=window.EXTRAS?window.EXTRAS({B,T,Li,Y}):{interview:[],practice:[],quiz:[]};
 X.practice.splice(NCORE,0,...A.practice); X.quiz.splice(NCORE,0,...A.quiz);
 LESSONS.push(...X.interview);
+const LV=window.LVL({B,T,Li,Y}); LESSONS.push(...LV.lessons); X.practice.push(...LV.practice); X.quiz.push(...LV.quiz);
 
 const $=id=>document.getElementById(id);
 const synth=window.speechSynthesis||null;
@@ -642,16 +659,55 @@ $("pjSteps").onclick=e=>{const b=e.target.closest(".pj-copy"); if(!b) return; co
   const ok=()=>{b.textContent="Copied!";setTimeout(()=>b.textContent="Copy",1500)};
   try{navigator.clipboard.writeText(t).then(ok,()=>{b.textContent="Select panni copy pannu"})}catch(e){b.textContent="Select panni copy pannu"}};
 
+// ---------- Mock interview ----------
+let mkRes=store.get("k8s-mock",{}), mkOrder=[], mkI=0, mkTimer=0, mkLeft=0;
+const mkAudio=new Audio();
+const mkList=()=>window.MOCK.map((m,i)=>i).filter(i=>!$("mkLvl").value||window.MOCK[i].l===$("mkLvl").value||window.MOCK[i].l==="All");
+function mkStart(){mkOrder=shuffle(mkList());mkI=0;mkRender()}
+function mkStats(){const L=mkList(),ok=L.filter(i=>mkRes[i]===1).length;$("mkBar").style.width=(L.length?ok/L.length*100:0)+"%";return [ok,L.length]}
+function mkStopAudio(){clearInterval(mkTimer);mkAudio.pause();mkAudio.onended=mkAudio.onerror=null;if(synth)synth.cancel();girl().classList.remove("talking")}
+function mkRender(){
+  mkStopAudio(); const [ok,n]=mkStats();
+  if(mkI>=mkOrder.length){
+    const rev=mkOrder.filter(i=>mkRes[i]!==1);
+    $("mkCard").innerHTML=`<div class="qn">Result</div><div class="qres">${ok} / ${n}</div>
+      <p class="qfb">${ok>=n*.8?"🏆 Nee interview ku ready kutty!":"💪 Nalla start! Keela irukkura topics revise pannu, thirumba try pannu."}</p>
+      ${rev.length?`<p class="note">Revise: ${[...new Set(rev.map(i=>window.MOCK[i].t))].map(esc).join(", ")}</p>`:""}
+      <div class="controls"><button class="btn play" id="mkAgain" type="button">↺ Thirumba start</button>${rev.length?`<button class="btn" id="mkRev" type="button">Revise list mattum</button>`:""}</div>`;
+    return;
+  }
+  const i=mkOrder[mkI], m=window.MOCK[i];
+  $("mkCard").innerHTML=`<div class="qn">Kelvi ${mkI+1} / ${mkOrder.length} · ${esc(m.t)} · ${esc(m.l)} · Ready ${ok}/${n}</div>
+    <h3 class="qq">${esc(m.q)}</h3>
+    <div class="controls"><button class="btn" id="mkHear" type="button">🔊 Malli Akka kelvi</button><span class="mk-timer" id="mkT">⏱ 60</span>
+      <button class="btn play" id="mkShow" type="button">Answer paaru 👀</button></div>
+    <div id="mkAns" hidden><ul class="mk-ans">${m.a.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+      <div class="controls"><button class="btn mk-ok" id="mkOk" type="button">✔ Correct ah sonnen</button><button class="btn" id="mkNo" type="button">↺ Revise venum</button></div></div>`;
+  mkLeft=60; mkTimer=setInterval(()=>{mkLeft--; const t=$("mkT"); if(t) t.textContent="⏱ "+Math.max(0,mkLeft); if(mkLeft<=0){clearInterval(mkTimer); if(t) t.classList.add("over")}},1000);
+  if(soundOn) mkHear(i);
+}
+function mkHear(i){mkAudio.pause();if(synth)synth.cancel();const fb=()=>{girl().classList.remove("talking");if(soundOn&&synth)speak(window.MOCK[i].q)};
+  mkAudio.onerror=fb;mkAudio.src=`audio/mq-${i+1}.mp3`;girl().classList.add("talking");mkAudio.onended=()=>girl().classList.remove("talking");mkAudio.play().catch(e=>{if(e&&e.name==="NotAllowedError")girl().classList.remove("talking")})}
+$("mkCard").onclick=e=>{const id=e.target.id, i=mkOrder[mkI];
+  if(id==="mkHear") mkHear(i);
+  else if(id==="mkShow"){clearInterval(mkTimer);$("mkAns").hidden=false;e.target.hidden=true}
+  else if(id==="mkOk"||id==="mkNo"){mkRes[i]=id==="mkOk"?1:0;store.set("k8s-mock",mkRes);fx(id==="mkOk"?"good-"+rnd(4):"retry-1");mkI++;mkRender()}
+  else if(id==="mkAgain") mkStart();
+  else if(id==="mkRev"){mkOrder=shuffle(mkOrder.filter(i=>mkRes[i]!==1));mkI=0;mkRender()}};
+$("mkLvl").onchange=mkStart;
+
 // ---------- Views ----------
-const VIEWS={class:["classView","navClass",""],cheat:["cheat","navCheat","cheatsheet"],proj:["proj","navProj","project"]};
+const VIEWS={class:["classView","navClass",""],cheat:["cheat","navCheat","cheatsheet"],proj:["proj","navProj","project"],mock:["mock","navMock","mock"]};
 function showView(v){
   for(const [k,[sec,btn]] of Object.entries(VIEWS)){$(sec).hidden=k!==v; $(btn).classList.toggle("on",k===v)}
   if(v!=="class"){stop();setPlaying(false)}
+  if(v==="mock"){if(!mkOrder.length) mkStart()} else mkStopAudio();
 }
 const viewFromHash=()=>Object.keys(VIEWS).find(k=>VIEWS[k][2]&&"#"+VIEWS[k][2]===location.hash)||"class";
 $("navClass").onclick=()=>{showView("class");history.replaceState(null,"",location.pathname)};
 $("navCheat").onclick=()=>{location.hash="cheatsheet";showView("cheat")};
 $("navProj").onclick=()=>{location.hash="project";showView("proj")};
+$("navMock").onclick=()=>{location.hash="mock";showView("mock")};
 window.addEventListener("hashchange",()=>showView(viewFromHash()));
 
 renderList(); renderScene(); renderLab(); renderCheat(); renderProj();

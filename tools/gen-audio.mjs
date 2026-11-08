@@ -4,6 +4,7 @@
 //   node tools/gen-audio.mjs --only 1-1,10-4     -> specific scenes
 //   node tools/gen-audio.mjs --lessons 1-5       -> lessons 1..5
 //   node tools/gen-audio.mjs --all [--force]     -> everything (existing files skipped unless --force)
+//   node tools/gen-audio.mjs --mock              -> mock interview questions (mq-N.mp3)
 //   node tools/gen-audio.mjs --print 4           -> just print the Tamil narration of lesson 4
 import fs from "node:fs"; import path from "node:path";
 import { load } from "./load.mjs"; import { ta } from "./ta.mjs";
@@ -22,7 +23,7 @@ const FX = {
 };
 
 const args = process.argv.slice(2), has = f => args.includes(f), val = f => args[args.indexOf(f) + 1];
-const { lessons } = load();
+const { lessons, mock } = load();
 const range = s => s.split(",").flatMap(p => { const [a, b] = p.split("-").map(Number); return b ? Array.from({ length: b - a + 1 }, (_, i) => a + i) : [a]; });
 
 if (has("--print")) {
@@ -36,6 +37,7 @@ if (has("--sample")) jobs = ["1-1", "2-3", "4-6", "10-4", "18-1"].map(x => scene
 else if (has("--only")) jobs = val("--only").split(",").map(x => scene(...x.split("-").map(Number)));
 else if (has("--lessons")) jobs = range(val("--lessons")).flatMap(L => lessons[L - 1].s.map((_, j) => scene(L, j + 1)));
 else if (has("--all")) jobs = lessons.flatMap((l, i) => l.s.map((_, j) => scene(i + 1, j + 1)));
+if (has("--mock") || has("--all")) jobs.push(...mock.map((m, i) => ({ name: `mq-${i + 1}`, text: ta(m.q) })));
 if (has("--fx") || has("--all") || has("--sample")) jobs.push(...Object.entries(FX).map(([k, v]) => ({ name: `fx-${k}`, text: v })));
 if (!jobs.length) { console.log("Nothing to do. See the usage at the top of this file."); process.exit(1); }
 if (!KEY) { console.error("SARVAM_API_KEY missing (.env)"); process.exit(1); }

@@ -8,6 +8,8 @@ Live: https://kubernets.vercel.app
 - 7 advanced lessons (taints & affinity, kubeadm, etcd backup/restore, cluster upgrade, EKS IAM, Node NotReady lab, DNS/network lab)
 - 2 project lessons + a 15-step **Project guide** checklist (todo-api ➜ Docker ➜ K8s ➜ Helm ➜ GitHub Actions ➜ Argo CD ➜ HPA + monitoring)
 - 8 interview-prep lessons (CrashLoopBackOff, ImagePullBackOff, Pending, no traffic, OOMKilled, …)
+- 8 Level Up lessons (Kustomize, Terraform + EKS, Loki logging, cert-manager, CRDs & Operators, Istio, networking internals, cost / Karpenter)
+- 🎤 Mock interview: 30 questions (Junior / Mid / Senior) asked by Malli Akka, 60 s timer, model answers, self-marking
 - Each lesson: 8 scenes, a board (big text, lists, a fake `kubectl` terminal, YAML explained line by line), Tamil audio with lip sync
 - Practice terminal (4 simulated `kubectl`/`helm` tasks per lesson, hint/skip/restart, praise audio), a 5-question shuffled quiz, and a searchable cheat sheet
 - Progress is saved in localStorage, and the layout works on mobile
@@ -20,6 +22,8 @@ public/            ← the only folder Vercel serves (vercel.json → outputDire
   lessons.js       26 core lessons  [subtitle, board]
   advanced.js      advanced + project lessons with their practice & quiz
   project.js       Project guide steps
+  levelup.js       Level Up lessons with their practice & quiz
+  mock.js          mock interview questions + model answers (audio/mq-N.mp3)
   extras.js        interview lessons, practice tasks, quizzes
   durations.js     lesson lengths (generated)
   audio/           {lesson}-{scene}.mp3 + fx-*.mp3 (generated)
@@ -37,6 +41,7 @@ tools/             NOT deployed
 cp .env.example .env    # put your Sarvam key in it
 node tools/gen-audio.mjs --print 5          # preview the Tamil narration of lesson 5
 node tools/gen-audio.mjs --only 5-3 --force # regenerate one scene
+node tools/gen-audio.mjs --mock             # mock interview questions
 node tools/gen-audio.mjs --all              # everything missing
 node tools/durations.mjs
 node tools/check.mjs
