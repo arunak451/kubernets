@@ -57,6 +57,7 @@ vandhuduchu வந்துடுச்சு|vandhudum வந்துடும
 varum வரும்|varuva வருவா|vayasu வயசு|vazhi வழி|vazhiya வழியா|vechaa வெச்சா|vechirukkum வெச்சிருக்கும்|vechu வெச்சு|vechuko வெச்சுக்கோ
 vechum வெச்சும்|vekka வெக்க|vekkaadhe வெக்காதே|vekkalaam வெக்கலாம்|vekkanum வெக்கணும்|vekkum வெக்கும்|velai வேலை|veliya வெளிய
 venaalum வேணாலும்|venaam வேணாம்|vendaam வேண்டாம்|venum வேணும்|vera வேற|vidaadhu விடாது|vidham விதம்|vishayam விஷயம்
+aagaama ஆகாம|aagaradha ஆகறதா|aagirukkalaam ஆகிருக்கலாம்|aakkalaam ஆக்கலாம்|anga அங்க|atha அத|athaan அதான்|edu எடு|illaatha இல்லாத|ippadi இப்படி|kaali காலி|kaatta காட்ட|kandupidikkalaam கண்டுபிடிக்கலாம்|kathukitta கத்துக்கிட்ட|kattuvaanga கட்டுவாங்க|kelu கேளு|konja கொஞ்ச|kudukkaadhe குடுக்காதே|maaruna மாறுனா|maarura மாறுற|maasathukku மாசத்துக்கு|maathu மாத்து|manushanga மனுஷங்க|marandhutta மறந்துட்ட|mudinja முடிஞ்ச|munnaadi முன்னாடி|nadakkanum நடக்கணும்|nera நேரா|neram நேரம்|padikkanum படிக்கணும்|paravaala பரவால்ல|pesala பேசல|pesum பேசும்|podaadhu போடாது|podala போடல|podalaamaa போடலாமா|podanum போடணும்|sonnen சொன்னேன்|serthu சேர்த்து|thoda தொட|thodaadhe தொடாதே|unmai உண்மை|vandhuchu வந்துச்சு|vara வர|varuvaanga வருவாங்க|
 vithiyaasam வித்தியாசம்|yaar யார்|yaaravadhu யாராவது|yen ஏன்|yeridum ஏறிடும்|yerikitte ஏறிக்கிட்டே|yethu ஏத்து|yethum ஏத்தும்
 `.trim().split(/[|\n]/).map(p => p.trim().split(" ")));
 
@@ -72,7 +73,7 @@ const SPOKEN = {
   HTTPS: "H T T P S", SHA: "S H A", LB: "L B", OOM: "O O M", GB: "G B", MB: "M B", Mi: "M I", Gi: "G I", ns: "N S",
   svc: "S V C", rs: "R S", db: "D B", sh: "S H", ssd: "S S D", gp3: "G P 3", v1: "V 1", v2: "V 2", CSI: "C S I",
   ID: "I D", SQL: "S Q L", MySQL: "My S Q L", PromQL: "Prom Q L", CronJob: "Cron Job", minikube: "mini kube",
-  web1: "web 1", vs: "versus", hpa: "H P A", eks: "E K S", ci: "C I", rbac: "R B A C", pvc: "P V C", env: "env", base64: "base 64", Bitnami: "Bitnami", GitOps: "Git Ops", DevOps: "Dev Ops",
+  web1: "web 1", CIDR: "CIDR", CKA: "C K A", GPU: "G P U", HA: "H A", IAM: "I A M", IRSA: "I R S A", OIDC: "O I D C", ARN: "A R N", RAM: "RAM", S3: "S 3", CoreDNS: "Core D N S", ETCDCTL: "E T C D C T L", etcdctl: "E T C D control", kubeadm: "kube admin", ghcr: "G H C R", pki: "P K I", sts: "S T S", ssh: "S S H", systemctl: "system control", journalctl: "journal control", nslookup: "N S lookup", README: "read me", Velero: "Velero", u: "U", etc: "E T C", sonnen: "சொன்னேன்", vs: "versus", hpa: "H P A", eks: "E K S", ci: "C I", rbac: "R B A C", pvc: "P V C", env: "env", base64: "base 64", Bitnami: "Bitnami", GitOps: "Git Ops", DevOps: "Dev Ops",
   containerd: "container D", httpGet: "HTTP Get", tcpSocket: "TCP Socket", envFrom: "env From", emptyDir: "empty Dir",
 };
 const ACR = new Set(["API", "IP", "HTTP", "TCP", "PVC", "OOM", "CPU", "DNS", "SHA"]);

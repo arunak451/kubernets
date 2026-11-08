@@ -105,7 +105,7 @@ aside h2 small{font:600 .8rem var(--body);color:var(--muted)}
 .lesson .d{font-size:.75rem;color:var(--muted);font-variant-numeric:tabular-nums}
 
 /* Nav, practice lab, quiz, cheat sheet */
-.nav{display:flex;gap:8px;width:100%}
+.nav{display:flex;flex-wrap:wrap;gap:8px;width:100%}
 .tab.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .lab{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:12px}
 #paneP{display:grid;gap:10px}
@@ -151,6 +151,20 @@ aside h2 small{font:600 .8rem var(--body);color:var(--muted)}
 .yk{color:#9FD9C4;font-weight:600}.yv{color:#FFFFFF;font-weight:400}.yd{color:var(--accent)}
 @media (max-width:620px){.yl{grid-template-columns:1fr;gap:0}.yl span{padding-left:12px;white-space:normal}}
 .short{border-color:var(--accent)}
+#proj{display:grid;gap:14px}
+.pj-intro{margin:0;color:var(--muted);max-width:75ch}
+.pj-bar{height:10px;background:var(--line);border-radius:5px;overflow:hidden}.pj-bar i{display:block;height:100%;width:0;background:var(--done);transition:width .3s}
+.pj-steps{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.pj{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-width:0}
+.pj.done{border-color:var(--done)}
+.pj label{display:flex;gap:10px;align-items:center;font:700 1.08rem/1.3 var(--display);cursor:pointer}
+.pj input{width:20px;height:20px;accent-color:var(--done);flex:none}
+.pj.done label span{text-decoration:line-through;text-decoration-color:var(--done)}
+.pj p{margin:6px 0 10px 30px;color:var(--muted)}
+.pj-code{position:relative;background:var(--term);border-radius:10px;min-width:0}
+.pj-code pre{margin:0;padding:12px 14px;overflow-x:auto;font:.82rem/1.5 var(--mono);color:#E6F4EF}
+.pj-copy{position:absolute;top:6px;right:6px;padding:4px 10px;font-size:.78rem}
+@media (max-width:620px){.pj p{margin-left:0}}
 /* Avatar animation */
 .lid{transform:scaleY(0);transform-box:fill-box;transform-origin:center top;animation:wink 4.5s infinite}
 .m-open{display:none}
@@ -180,12 +194,20 @@ aside h2 small{font:600 .8rem var(--body);color:var(--muted)}
 <div class="wrap">
   <header>
     <h1>Malli Akka <span>Kubernetes Class</span></h1>
-    <p class="tag">DevOps ku thevaiyaana Kubernetes · 26 lessons + 8 interview prep · ovvonnum ~2 nimisham</p>
+    <p class="tag">DevOps ku thevaiyaana Kubernetes · 26 lessons + 7 advanced + 2 project + 8 interview prep · ovvonnum ~2 nimisham</p>
     <nav class="nav" aria-label="Views">
       <button class="btn tab on" id="navClass" type="button">📺 Class</button>
       <button class="btn tab" id="navCheat" type="button">📄 Cheat sheet</button>
+      <button class="btn tab" id="navProj" type="button">🛠 Project guide</button>
     </nav>
   </header>
+
+  <section id="proj" hidden>
+    <div class="cheat-head"><h2 id="pjTitle"></h2><span class="note" id="pjCount"></span></div>
+    <p class="pj-intro" id="pjIntro"></p>
+    <div class="pj-bar"><i id="pjBar"></i></div>
+    <ol id="pjSteps" class="pj-steps"></ol>
+  </section>
 
   <section id="cheat" hidden>
     <div class="cheat-head">
@@ -339,12 +361,17 @@ aside h2 small{font:600 .8rem var(--body);color:var(--muted)}
 
 <script src="durations.js"></script>
 <script src="lessons.js"></script>
+<script src="advanced.js"></script>
+<script src="project.js"></script>
 <script src="extras.js"></script>
 <script>
 const B=(a,b)=>({k:"big",a,b}), T=(...l)=>({k:"term",l}), Li=(a,...r)=>({k:"list",a,r}), Y=(f,...r)=>({k:"yaml",f,r});
-const LESSONS=window.CORE({B,T,Li,Y});
+const A=window.ADV({B,T,Li,Y});
+const LESSONS=[...window.CORE({B,T,Li,Y}),...A.lessons];
+const NCORE=LESSONS.length-A.lessons.length;
 
 const X=window.EXTRAS?window.EXTRAS({B,T,Li,Y}):{interview:[],practice:[],quiz:[]};
+X.practice.splice(NCORE,0,...A.practice); X.quiz.splice(NCORE,0,...A.quiz);
 LESSONS.push(...X.interview);
 
 const $=id=>document.getElementById(id);
@@ -353,6 +380,9 @@ let L=0,S=0,playing=false,token=0,soundOn=true,natural=true,voice=null,voices=[]
 const audio=new Audio(); audio.preload="auto";
 let actx=null,analyser=null,abuf=null,raf=0;
 const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+if(store.get("k8s-v",1)<2){const sh=i=>+i>=NCORE?+i+A.lessons.length:+i, shk=o=>Object.fromEntries(Object.entries(o).map(([k,v])=>[sh(k),v]));
+  store.set("k8s-done",store.get("k8s-done",[]).map(sh)); store.set("k8s-prac",shk(store.get("k8s-prac",{}))); store.set("k8s-quiz",shk(store.get("k8s-quiz",{})));
+  const p=store.get("k8s-pos",[0,0]); store.set("k8s-pos",[sh(p[0]),p[1]]); store.set("k8s-v",2)}
 let done=store.get("k8s-done",[]);
 let pracDone=store.get("k8s-prac",{}), quizBest=store.get("k8s-quiz",{});
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -596,15 +626,34 @@ function renderCheat(){
   $("cheatBody").innerHTML=(top+html)||`<p class="note">"${esc(q)}" ku edhuvum kidaikkala kutty.</p>`;
 }
 $("cq").oninput=renderCheat;
-function showView(cheat){
-  $("cheat").hidden=!cheat; $("classView").hidden=cheat;
-  $("navCheat").classList.toggle("on",cheat); $("navClass").classList.toggle("on",!cheat);
-  if(cheat){stop();setPlaying(false)}
+// ---------- Project guide ----------
+let pjDone=store.get("k8s-proj",[]);
+function renderProj(){
+  const P=window.PROJECT; if(!P) return;
+  $("pjTitle").textContent=P.title; $("pjIntro").textContent=P.intro;
+  $("pjSteps").innerHTML=P.steps.map((st,i)=>`<li class="pj${pjDone.includes(i)?" done":""}"><label><input type="checkbox" data-i="${i}"${pjDone.includes(i)?" checked":""}><span>${esc(st.t)}</span></label>
+    <p>${esc(st.d)}</p><div class="pj-code"><button class="btn pj-copy" type="button" data-i="${i}">Copy</button><pre>${esc(st.c)}</pre></div></li>`).join("");
+  pjCount();
 }
-$("navClass").onclick=()=>{showView(false);history.replaceState(null,"",location.pathname)};
-$("navCheat").onclick=()=>{showView(true);location.hash="cheatsheet"};
-window.addEventListener("hashchange",()=>showView(location.hash==="#cheatsheet"));
+function pjCount(){const n=window.PROJECT.steps.length;$("pjCount").textContent=`${pjDone.length} / ${n} steps mudinjuthu`;$("pjBar").style.width=(pjDone.length/n*100)+"%"}
+$("pjSteps").onchange=e=>{const i=+e.target.dataset.i; pjDone=e.target.checked?[...new Set([...pjDone,i])]:pjDone.filter(x=>x!==i);
+  store.set("k8s-proj",pjDone); e.target.closest("li").classList.toggle("done",e.target.checked); pjCount()};
+$("pjSteps").onclick=e=>{const b=e.target.closest(".pj-copy"); if(!b) return; const t=window.PROJECT.steps[+b.dataset.i].c;
+  const ok=()=>{b.textContent="Copied!";setTimeout(()=>b.textContent="Copy",1500)};
+  try{navigator.clipboard.writeText(t).then(ok,()=>{b.textContent="Select panni copy pannu"})}catch(e){b.textContent="Select panni copy pannu"}};
 
-renderList(); renderScene(); renderLab(); renderCheat();
-if(location.hash==="#cheatsheet") showView(true);
+// ---------- Views ----------
+const VIEWS={class:["classView","navClass",""],cheat:["cheat","navCheat","cheatsheet"],proj:["proj","navProj","project"]};
+function showView(v){
+  for(const [k,[sec,btn]] of Object.entries(VIEWS)){$(sec).hidden=k!==v; $(btn).classList.toggle("on",k===v)}
+  if(v!=="class"){stop();setPlaying(false)}
+}
+const viewFromHash=()=>Object.keys(VIEWS).find(k=>VIEWS[k][2]&&"#"+VIEWS[k][2]===location.hash)||"class";
+$("navClass").onclick=()=>{showView("class");history.replaceState(null,"",location.pathname)};
+$("navCheat").onclick=()=>{location.hash="cheatsheet";showView("cheat")};
+$("navProj").onclick=()=>{location.hash="project";showView("proj")};
+window.addEventListener("hashchange",()=>showView(viewFromHash()));
+
+renderList(); renderScene(); renderLab(); renderCheat(); renderProj();
+showView(viewFromHash());
 </script>

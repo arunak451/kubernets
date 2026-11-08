@@ -260,5 +260,5 @@ window.CORE = ({ B, T, Li, Y }) => [
 ["Namespace ku Pod Security Standards. restricted level pottaa, unsafe pods ah ulla vidaadhu.",T(["kubectl label ns prod pod-security.kubernetes.io/enforce=restricted","namespace/prod labeled"])],
 ["RBAC least privilege, NetworkPolicy default deny, Secrets encryption. Ellaa YAML um Git la, GitOps vazhiya.",Li("Security",["RBAC","least privilege"],["NetworkPolicy","default deny"],["Secrets","encrypt + Vault"],["Git","ellaa YAML um"])],
 ["Labels consistent ah podu. app, env, team, version. Debug um cost tracking um easy aagum.",Y("labels",["labels:",""],["  app.kubernetes.io/name: web",""],["  app.kubernetes.io/version: \"1.4.2\"",""],["  env: prod",""],["  team: payments",""])],
-["Congratulations kutty! Kubernetes core mudichitta. Ippo interview prep section ku polaam. Naan unna nenachu romba proud!",B("🎉 Core course mudinjuthu!","Adutha: Interview prep")]]}
+["Congratulations kutty! Kubernetes core mudichitta. Adutha advanced lessons, project, apram interview prep. Naan unna nenachu romba proud!",B("🎉 Core course mudinjuthu!","Adutha: Advanced ➜ Project ➜ Interview")]]}
 ];

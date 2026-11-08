@@ -2,9 +2,11 @@
 
 A Kubernetes course for absolute beginners on the DevOps path. Malli Akka, an animated teacher avatar, explains each concept in Tanglish with kid-style analogies and speaks the narration in natural Tamil.
 
-Live: https://k8scourse.vercel.app
+Live: https://kubernets.vercel.app
 
 - 26 core lessons (container recap ➜ architecture ➜ pods ➜ deployments ➜ services ➜ storage ➜ ingress ➜ probes ➜ HPA ➜ RBAC ➜ Helm ➜ EKS ➜ monitoring ➜ CI/CD & GitOps ➜ best practices)
+- 7 advanced lessons (taints & affinity, kubeadm, etcd backup/restore, cluster upgrade, EKS IAM, Node NotReady lab, DNS/network lab)
+- 2 project lessons + a 15-step **Project guide** checklist (todo-api ➜ Docker ➜ K8s ➜ Helm ➜ GitHub Actions ➜ Argo CD ➜ HPA + monitoring)
 - 8 interview-prep lessons (CrashLoopBackOff, ImagePullBackOff, Pending, no traffic, OOMKilled, …)
 - Each lesson: 8 scenes, a board (big text, lists, a fake `kubectl` terminal, YAML explained line by line), Tamil audio with lip sync
 - Practice terminal (4 simulated `kubectl`/`helm` tasks per lesson, hint/skip/restart, praise audio), a 5-question shuffled quiz, and a searchable cheat sheet
@@ -16,6 +18,8 @@ Live: https://k8scourse.vercel.app
 public/            ← the only folder Vercel serves (vercel.json → outputDirectory)
   index.html       player, practice, quiz, cheat sheet (same structure as the Linux course)
   lessons.js       26 core lessons  [subtitle, board]
+  advanced.js      advanced + project lessons with their practice & quiz
+  project.js       Project guide steps
   extras.js        interview lessons, practice tasks, quizzes
   durations.js     lesson lengths (generated)
   audio/           {lesson}-{scene}.mp3 + fx-*.mp3 (generated)
