@@ -1,4 +1,5 @@
 // Generate Malli Akka narration with Sarvam AI (bulbul:v3, speaker kavitha, ta-IN, mp3).
+// TTS=fish node tools/gen-audio.mjs ...     -> Fish Audio (free s2.1-pro-free model, "tamil sneha" voice, speed 0.85)
 // COURSE=aibot node tools/gen-audio.mjs ... -> the AI Interview Bot course (public/aibot/audio)
 // Key: SARVAM_API_KEY in .env (never deployed). Output: public/audio/{lesson}-{scene}.mp3 and fx-*.mp3
 //   node tools/gen-audio.mjs --sample            -> a few sample scenes into public/audio/
@@ -41,16 +42,24 @@ else if (has("--all")) jobs = lessons.flatMap((l, i) => l.s.map((_, j) => scene(
 if (has("--mock") || has("--all")) jobs.push(...mock.map((m, i) => ({ name: `mq-${i + 1}`, text: ta(m.q) })));
 if (has("--fx") || has("--all") || has("--sample")) jobs.push(...Object.entries(FX).map(([k, v]) => ({ name: `fx-${k}`, text: v })));
 if (!jobs.length) { console.log("Nothing to do. See the usage at the top of this file."); process.exit(1); }
-if (!KEY) { console.error("SARVAM_API_KEY missing (.env)"); process.exit(1); }
+if (process.env.TTS === "fish" ? !process.env.FISH_API_KEY : !KEY) { console.error((process.env.TTS === "fish" ? "FISH_API_KEY" : "SARVAM_API_KEY") + " missing (.env)"); process.exit(1); }
 if (!has("--force")) jobs = jobs.filter(j => !fs.existsSync(path.join(out, j.name + ".mp3")));
 
+// TTS=fish uses Fish Audio's free model with the "tamil sneha" voice at 0.85x speed (key: FISH_API_KEY).
+const FISH = process.env.TTS === "fish";
+const FISH_VOICE = process.env.FISH_VOICE || "31792949c082466bab25d6f3327ac216", FISH_SPEED = Number(process.env.FISH_SPEED || 0.85);
 async function tts(text) {
   for (let attempt = 1; ; attempt++) {
-    const res = await fetch("https://api.sarvam.ai/text-to-speech", {
-      method: "POST", headers: { "api-subscription-key": KEY, "Content-Type": "application/json" },
-      body: JSON.stringify({ text, target_language_code: "ta-IN", speaker: "kavitha", model: "bulbul:v3", output_audio_codec: "mp3" }),
-    });
-    if (res.ok) { const j = await res.json(); return Buffer.from(j.audios.join(""), "base64"); }
+    const res = FISH
+      ? await fetch("https://api.fish.audio/v1/tts", {
+          method: "POST", headers: { Authorization: `Bearer ${process.env.FISH_API_KEY}`, "Content-Type": "application/json", model: "s2.1-pro-free" },
+          body: JSON.stringify({ text, format: "mp3", reference_id: FISH_VOICE, prosody: { speed: FISH_SPEED } }),
+        })
+      : await fetch("https://api.sarvam.ai/text-to-speech", {
+          method: "POST", headers: { "api-subscription-key": KEY, "Content-Type": "application/json" },
+          body: JSON.stringify({ text, target_language_code: "ta-IN", speaker: "kavitha", model: "bulbul:v3", output_audio_codec: "mp3" }),
+        });
+    if (res.ok) { if (FISH) return Buffer.from(await res.arrayBuffer()); const j = await res.json(); return Buffer.from(j.audios.join(""), "base64"); }
     const body = await res.text();
     if (attempt >= 5 || (res.status < 500 && res.status !== 429)) throw new Error(`${res.status} ${body.slice(0, 200)}`);
     await new Promise(r => setTimeout(r, 1500 * 2 ** attempt));
